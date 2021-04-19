@@ -3,7 +3,7 @@ package com.joesemper.simpletranslator.view.main
 import com.joesemper.simpletranslator.model.data.AppState
 import com.joesemper.simpletranslator.model.data.DataModel
 import com.joesemper.simpletranslator.model.datasource.DataSource
-import com.joesemper.simpletranslator.presenter.Interactor
+import com.joesemper.simpletranslator.viewmodel.Interactor
 import io.reactivex.Single
 
 class MainInteractor(

@@ -1,4 +1,4 @@
-package com.joesemper.simpletranslator.presenter
+package com.joesemper.simpletranslator.viewmodel
 
 import io.reactivex.Single
 

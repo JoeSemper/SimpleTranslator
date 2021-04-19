@@ -10,8 +10,14 @@ import kotlinx.android.synthetic.main.main_fragment_recycler_item.view.*
 
 class MainAdapter(
     private var onListItemClickListener: OnListItemClickListener,
-    private var data: List<DataModel>
 ) : RecyclerView.Adapter<MainAdapter.RecyclerItemViewHolder>() {
+
+    private var data: List<DataModel> = arrayListOf()
+
+    fun setData(data: List<DataModel>) {
+        this.data = data
+        notifyDataSetChanged()
+    }
 
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bind(data: DataModel) {
@@ -22,11 +28,6 @@ class MainAdapter(
                 itemView.setOnClickListener { openInNewWindow(data) }
             }
         }
-    }
-
-    fun setData(data: List<DataModel>) {
-        this.data = data
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerItemViewHolder {

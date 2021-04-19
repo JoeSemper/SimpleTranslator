@@ -1,7 +1,11 @@
 package com.joesemper.simpletranslator.view.main
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
@@ -9,25 +13,38 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.joesemper.simpletranslator.R
 import com.joesemper.simpletranslator.model.data.AppState
 import com.joesemper.simpletranslator.model.data.DataModel
-import com.joesemper.simpletranslator.presenter.Presenter
+import com.joesemper.simpletranslator.model.datasource.db.DataSourceLocal
+import com.joesemper.simpletranslator.model.datasource.remote.DataSourceRemote
+import com.joesemper.simpletranslator.utils.network.isOnline
 import com.joesemper.simpletranslator.view.base.BaseFragment
-import com.joesemper.simpletranslator.view.base.MvpView
 import com.joesemper.simpletranslator.view.main.adapter.MainAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
-class MainFragment : BaseFragment<AppState>(R.layout.fragment_main) {
+class MainFragment : BaseFragment<AppState, MainInteractor>() {
 
-    private var adapter: MainAdapter? = null
+    private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
 
     private val onListItemClickListener = OnMainRvItemClickListener()
 
-    override fun createPresenter(): Presenter<AppState, MvpView> {
-        return MainPresenterImpl()
+    override lateinit var model: MainViewModel
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = View.inflate(context, R.layout.fragment_main, null)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        model = MainViewModel(MainInteractor(DataSourceRemote(), DataSourceLocal()))
+        model.subscribe().observe(this, { renderData(it) })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initRV()
         setOnSearchClickListener()
     }
 
@@ -41,28 +58,28 @@ class MainFragment : BaseFragment<AppState>(R.layout.fragment_main) {
 
     private fun doOnSuccess(appState: AppState.Success) {
         val dataModel = appState.data
-        if (dataModel == null || dataModel.isEmpty()) {
-            showErrorScreen(getString(R.string.empty_server_response_on_success))
+        if (dataModel.isNullOrEmpty()) {
+            showViewContent()
+            showAlertDialog(
+                getString(R.string.dialog_tittle_sorry),
+                getString(R.string.empty_server_response_on_success)
+            )
         } else {
-            showViewSuccess()
-            if (adapter == null) {
-                rv_main.layoutManager = LinearLayoutManager(context)
-                rv_main.adapter = MainAdapter(onListItemClickListener, dataModel)
-            } else {
-                adapter!!.setData(dataModel)
-            }
+            showViewContent()
+            adapter.setData(dataModel)
         }
     }
+
 
     private fun doOnLoading(appState: AppState.Loading) {
         showViewLoading()
         if (appState.progress != null) {
-            progress_bar_horizontal.visibility = View.VISIBLE
-            progress_bar_round.visibility = View.GONE
+            progress_bar_horizontal.visibility = VISIBLE
+            progress_bar_round.visibility = GONE
             progress_bar_horizontal.progress = appState.progress
         } else {
-            progress_bar_horizontal.visibility = View.GONE
-            progress_bar_round.visibility = View.VISIBLE
+            progress_bar_horizontal.visibility = GONE
+            progress_bar_round.visibility = VISIBLE
         }
     }
 
@@ -71,29 +88,18 @@ class MainFragment : BaseFragment<AppState>(R.layout.fragment_main) {
     }
 
     private fun showErrorScreen(error: String?) {
-        showViewError()
-        tv_error_main.text = error ?: getString(R.string.undefined_error)
-        button_reload.setOnClickListener {
-            presenter.getData(text_input_search.text.toString(), true)
-        }
+        showViewContent()
+        showAlertDialog(getString(R.string.error), error)
     }
 
-    private fun showViewSuccess() {
-        group_success.visibility = View.VISIBLE
-        group_loading.visibility = View.GONE
-        group_error.visibility = View.GONE
+    private fun showViewContent() {
+        group_success.visibility = VISIBLE
+        group_loading.visibility = GONE
     }
 
     private fun showViewLoading() {
-        group_success.visibility = View.GONE
-        group_loading.visibility = View.VISIBLE
-        group_error.visibility = View.GONE
-    }
-
-    private fun showViewError() {
-        group_success.visibility = View.GONE
-        group_loading.visibility = View.GONE
-        group_error.visibility = View.VISIBLE
+        group_loading.visibility = VISIBLE
+        group_success.visibility = GONE
     }
 
     inner class OnMainRvItemClickListener : MainAdapter.OnListItemClickListener {
@@ -105,8 +111,19 @@ class MainFragment : BaseFragment<AppState>(R.layout.fragment_main) {
     private fun setOnSearchClickListener() {
         text_input_layout_search.setEndIconOnClickListener {
             hideKeyboard(text_input_search)
-            presenter.getData(text_input_search.text.toString(), true)
+            val word = text_input_search.text.toString()
+            isNetWorkAvailable = isOnline(requireContext())
+            if (isNetWorkAvailable) {
+                model.getData(word, isNetWorkAvailable)
+            } else {
+                showNoInternetConnectionDialog()
+            }
         }
+    }
+
+    private fun initRV() {
+        rv_main.layoutManager = LinearLayoutManager(context)
+        rv_main.adapter = adapter
     }
 
     private fun hideKeyboard(view: View) {
@@ -116,5 +133,4 @@ class MainFragment : BaseFragment<AppState>(R.layout.fragment_main) {
             manager?.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
-
 }
