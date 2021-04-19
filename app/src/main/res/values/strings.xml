@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Simple Translator</string>
+    <string name="enter_your_word">Enter your word</string>
+    <string name="text_input_helper">Find word translation</string>
+    <string name="empty_server_response_on_success">Response from server is empty</string>
+    <string name="error_textview_stub">Error</string>
+    <string name="reload">Reload</string>
+    <string name="undefined_error">Undefined error</string>
 </resources>
