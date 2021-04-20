@@ -1,10 +1,9 @@
-package com.joesemper.simpletranslator.model.datasource.db
+package com.joesemper.simpletranslator.model.datasource
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.joesemper.simpletranslator.model.data.DataModel
-import com.joesemper.simpletranslator.model.datasource.remote.ApiService
-import com.joesemper.simpletranslator.model.datasource.remote.BaseInterceptor
-import com.joesemper.simpletranslator.model.datasource.DataSource
+import com.joesemper.simpletranslator.model.data.api.ApiService
+import com.joesemper.simpletranslator.model.data.api.BaseInterceptor
 import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

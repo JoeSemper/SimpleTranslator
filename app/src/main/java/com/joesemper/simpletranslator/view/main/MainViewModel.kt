@@ -5,8 +5,9 @@ import com.joesemper.simpletranslator.model.data.AppState
 import com.joesemper.simpletranslator.utils.parseSearchResults
 import com.joesemper.simpletranslator.viewmodel.BaseViewModel
 import io.reactivex.disposables.Disposable
+import javax.inject.Inject
 
-class MainViewModel (private val interactor: MainInteractor) : BaseViewModel<AppState>() {
+class MainViewModel @Inject constructor(private val interactor: MainInteractor) : BaseViewModel<AppState>() {
 
     private var appState: AppState? = null
 

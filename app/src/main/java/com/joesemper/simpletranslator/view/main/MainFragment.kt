@@ -9,19 +9,23 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joesemper.simpletranslator.R
+import com.joesemper.simpletranslator.app.SimpleTranslatorApp
 import com.joesemper.simpletranslator.model.data.AppState
 import com.joesemper.simpletranslator.model.data.DataModel
-import com.joesemper.simpletranslator.model.datasource.db.DataSourceLocal
-import com.joesemper.simpletranslator.model.datasource.remote.DataSourceRemote
 import com.joesemper.simpletranslator.utils.network.isOnline
 import com.joesemper.simpletranslator.view.base.BaseFragment
 import com.joesemper.simpletranslator.view.main.adapter.MainAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
+import javax.inject.Inject
 
 
 class MainFragment : BaseFragment<AppState, MainInteractor>() {
+
+    @Inject
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
 
@@ -37,9 +41,8 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        model = MainViewModel(MainInteractor(DataSourceRemote(), DataSourceLocal()))
-        model.subscribe().observe(this, { renderData(it) })
+        SimpleTranslatorApp.instance.appComponent.inject(this)
+        initViewModel()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -119,6 +122,11 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
                 showNoInternetConnectionDialog()
             }
         }
+    }
+
+    private fun initViewModel() {
+        model = viewModelFactory.create(MainViewModel::class.java)
+        model.subscribe().observe(this, { renderData(it) })
     }
 
     private fun initRV() {

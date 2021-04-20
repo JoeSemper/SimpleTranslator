@@ -1,4 +1,4 @@
-package com.joesemper.simpletranslator.model.datasource.remote
+package com.joesemper.simpletranslator.model.data.api
 
 import com.joesemper.simpletranslator.model.data.DataModel
 import io.reactivex.Single

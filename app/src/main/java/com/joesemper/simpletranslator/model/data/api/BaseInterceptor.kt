@@ -1,4 +1,4 @@
-package com.joesemper.simpletranslator.model.datasource.remote
+package com.joesemper.simpletranslator.model.data.api
 
 import okhttp3.Interceptor
 import okhttp3.Response

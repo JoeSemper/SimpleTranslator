@@ -1,4 +1,4 @@
-package com.joesemper.simpletranslator.model.datasource.remote
+package com.joesemper.simpletranslator.model.datasource
 
 import com.joesemper.simpletranslator.model.data.DataModel
 import com.joesemper.simpletranslator.model.datasource.DataSource
