@@ -4,7 +4,6 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.joesemper.simpletranslator.model.data.DataModel
 import com.joesemper.simpletranslator.model.data.api.ApiService
 import com.joesemper.simpletranslator.model.data.api.BaseInterceptor
-import io.reactivex.Single
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitImplementation : DataSource<List<DataModel>> {
 
-    override fun getData(word: String): Single<List<DataModel>> {
+    override suspend fun getData(word: String): List<DataModel> {
         return getService(BaseInterceptor.interceptor).search(word)
     }
 
