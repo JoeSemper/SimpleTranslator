@@ -1,32 +1,52 @@
 package com.joesemper.simpletranslator.view.base
 
 import android.os.Bundle
-import androidx.annotation.LayoutRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.joesemper.simpletranslator.R
 import com.joesemper.simpletranslator.model.data.AppState
-import com.joesemper.simpletranslator.presenter.Presenter
+import com.joesemper.simpletranslator.utils.network.isOnline
+import com.joesemper.simpletranslator.utils.ui.AlertDialogFragment
+import com.joesemper.simpletranslator.viewmodel.BaseViewModel
+import com.joesemper.simpletranslator.viewmodel.Interactor
 
-abstract class BaseFragment<T : AppState>(@LayoutRes layoutId: Int) : Fragment(layoutId), MvpView {
+abstract class BaseFragment<T : AppState, I: Interactor<T>> : Fragment() {
 
-    protected lateinit var presenter: Presenter<T, MvpView>
+    abstract val model: BaseViewModel<T>
 
-    protected abstract fun createPresenter(): Presenter<T, MvpView>
-
-    abstract override fun renderData(appState: AppState)
+    protected var isNetWorkAvailable: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = createPresenter()
+        isNetWorkAvailable = isOnline(requireContext())
     }
 
-    override fun onStart() {
-        super.onStart()
-        presenter.attachView(this)
+    override fun onResume() {
+        super.onResume()
+        isNetWorkAvailable = isOnline(requireContext())
+        if (!isNetWorkAvailable && isDialogNull()) {
+            showNoInternetConnectionDialog()
+        }
     }
 
-    override fun onStop() {
-        super.onStop()
-        presenter.detachView(this)
+    protected fun showNoInternetConnectionDialog() {
+        showAlertDialog(
+            getString(R.string.dialog_title_device_is_offline),
+            getString(R.string.dialog_message_device_is_offline)
+        )
+    }
+
+    protected fun showAlertDialog(title: String?, message: String?) {
+        val fragmentManager = requireActivity().supportFragmentManager
+        AlertDialogFragment.newInstance(title, message).show(fragmentManager, DIALOG_FRAGMENT_TAG)
+    }
+
+    private fun isDialogNull(): Boolean {
+        return requireActivity().supportFragmentManager.findFragmentByTag(DIALOG_FRAGMENT_TAG) == null
+    }
+
+    abstract fun renderData(appState: T)
+
+    companion object {
+        private const val DIALOG_FRAGMENT_TAG = "74a54328-5d62-46bf-ab6b-cbf5d8c79522"
     }
 }

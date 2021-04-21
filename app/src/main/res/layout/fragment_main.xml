@@ -72,50 +72,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
-    <TextView
-        android:id="@+id/tv_error_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/error_textview_stub"
-        android:textColor="@color/textColorError"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button_reload"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/reload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progress_bar_round" />
-
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_success"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:constraint_referenced_ids="rv_main"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:constraint_referenced_ids="progress_bar_round, progress_bar_horizontal"
-        tools:visibility="gone" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_error"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:constraint_referenced_ids="tv_error_main, button_reload"
         tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
