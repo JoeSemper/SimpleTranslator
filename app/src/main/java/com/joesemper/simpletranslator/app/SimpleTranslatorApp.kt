@@ -1,28 +1,16 @@
 package com.joesemper.simpletranslator.app
 
 import android.app.Application
-import com.joesemper.simpletranslator.di.AppComponent
-import com.joesemper.simpletranslator.di.DaggerAppComponent
+import com.joesemper.simpletranslator.di.application
+import com.joesemper.simpletranslator.di.mainScreen
+import org.koin.core.context.startKoin
 
-class SimpleTranslatorApp: Application() {
-
-    lateinit var appComponent: AppComponent
-
-    companion object {
-        lateinit var instance: SimpleTranslatorApp
-    }
+class SimpleTranslatorApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
-
-        appComponent = DaggerAppComponent.builder()
-            .application(this)
-            .build()
-        appComponent.inject(this)
-
+        startKoin {
+            modules(listOf(application, mainScreen))
+        }
     }
-
-
-
 }
