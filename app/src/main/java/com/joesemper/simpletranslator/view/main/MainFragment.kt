@@ -9,13 +9,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.LifecycleOwner
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joesemper.simpletranslator.R
 import com.joesemper.simpletranslator.model.data.AppState
 import com.joesemper.simpletranslator.model.data.DataModel
+import com.joesemper.simpletranslator.utils.convertMeaningsToString
 import com.joesemper.simpletranslator.utils.network.isOnline
 import com.joesemper.simpletranslator.view.base.BaseFragment
 import com.joesemper.simpletranslator.view.main.adapter.MainAdapter
+import com.joesemper.simpletranslator.view.main.description.DescriptionFragment
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
@@ -96,15 +100,19 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
 
     inner class OnMainRvItemClickListener : MainAdapter.OnListItemClickListener {
         override fun onItemClick(data: DataModel) {
-            Toast.makeText(context, data.text, Toast.LENGTH_SHORT).show()
+            view?.findNavController()?.navigate(
+                MainFragmentDirections.actionMainFragmentToDescriptionFragment(
+                    data.meanings?.first()?.imageUrl!!,
+                    data.text!!,
+                    convertMeaningsToString(data.meanings),
+                ))
         }
     }
-
 
     private fun initViewModel() {
         val viewModel: MainViewModel by viewModel()
         model = viewModel
-        model.subscribe().observe(this, { renderData(it) })
+        model.subscribe().observe(this as LifecycleOwner, { renderData(it) })
     }
 
     private fun initViews() {
