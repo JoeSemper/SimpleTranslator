@@ -1,14 +1,12 @@
-package com.joesemper.simpletranslator.view.main
+package com.joesemper.simpletranslator.view.history
 
 import androidx.lifecycle.LiveData
 import com.joesemper.simpletranslator.model.data.AppState
-import com.joesemper.simpletranslator.utils.parseOnlineSearchResults
+import com.joesemper.simpletranslator.utils.parseLocalSearchResults
 import com.joesemper.simpletranslator.viewmodel.BaseViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class MainViewModel(private val interactor: MainInteractor) : BaseViewModel<AppState>() {
+class HistoryViewModel(private val interactor: HistoryInteractor) : BaseViewModel<AppState>() {
 
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
 
@@ -22,10 +20,9 @@ class MainViewModel(private val interactor: MainInteractor) : BaseViewModel<AppS
         viewModelCoroutineScope.launch { startInteractor(word, isOnline) }
     }
 
-    private suspend fun startInteractor(word: String, isOnline: Boolean) =
-        withContext(Dispatchers.IO) {
-            _mutableLiveData.postValue(parseOnlineSearchResults(interactor.getData(word, isOnline)))
-        }
+    private suspend fun startInteractor(word: String, isOnline: Boolean) {
+        _mutableLiveData.postValue(parseLocalSearchResults(interactor.getData(word, isOnline)))
+    }
 
     override fun handleError(error: Throwable) {
         _mutableLiveData.postValue(AppState.Error(error))

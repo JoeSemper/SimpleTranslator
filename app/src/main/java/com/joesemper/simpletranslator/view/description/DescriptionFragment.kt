@@ -1,4 +1,4 @@
-package com.joesemper.simpletranslator.view.main.description
+package com.joesemper.simpletranslator.view.description
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -19,12 +19,12 @@ class DescriptionFragment: Fragment(R.layout.fragment_description) {
     private val args: DescriptionFragmentArgs by navArgs()
 
     companion object {
-        private const val DIALOG_FRAGMENT_TAG = "com.joesemper.simpletranslator.view.main.description"
+        private const val DIALOG_FRAGMENT_TAG = "com.joesemper.simpletranslator.view.description"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setHasOptionsMenu(true)
         setActionbarHomeButtonAsUp()
     }
 
@@ -84,7 +84,7 @@ class DescriptionFragment: Fragment(R.layout.fragment_description) {
     }
 
     private fun stopRefreshAnimationIfNeeded() {
-        if (description_fragment_swipe_refresh.isRefreshing) {
+        if (description_fragment_swipe_refresh != null && description_fragment_swipe_refresh.isRefreshing) {
             description_fragment_swipe_refresh.isRefreshing = false
         }
     }

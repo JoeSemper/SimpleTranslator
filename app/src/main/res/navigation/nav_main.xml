@@ -13,11 +13,14 @@
         <action
             android:id="@+id/action_mainFragment_to_descriptionFragment"
             app:destination="@id/descriptionFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/descriptionFragment"
-        android:name="com.joesemper.simpletranslator.view.main.description.DescriptionFragment"
+        android:name="com.joesemper.simpletranslator.view.description.DescriptionFragment"
         android:label="DescriptionFragment">
         <argument
             android:name="img"
@@ -29,4 +32,8 @@
             android:name="description"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.joesemper.simpletranslator.view.history.HistoryFragment"
+        android:label="HistoryFragment" />
 </navigation>
