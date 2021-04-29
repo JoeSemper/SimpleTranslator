@@ -9,23 +9,18 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joesemper.simpletranslator.R
-import com.joesemper.simpletranslator.app.SimpleTranslatorApp
 import com.joesemper.simpletranslator.model.data.AppState
 import com.joesemper.simpletranslator.model.data.DataModel
 import com.joesemper.simpletranslator.utils.network.isOnline
 import com.joesemper.simpletranslator.view.base.BaseFragment
 import com.joesemper.simpletranslator.view.main.adapter.MainAdapter
 import kotlinx.android.synthetic.main.fragment_main.*
-import javax.inject.Inject
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class MainFragment : BaseFragment<AppState, MainInteractor>() {
-
-    @Inject
-    internal lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val adapter: MainAdapter by lazy { MainAdapter(onListItemClickListener) }
 
@@ -39,16 +34,10 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
         savedInstanceState: Bundle?
     ): View? = View.inflate(context, R.layout.fragment_main, null)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        SimpleTranslatorApp.instance.appComponent.inject(this)
-        initViewModel()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRV()
-        setOnSearchClickListener()
+        initViewModel()
+        initViews()
     }
 
     override fun renderData(appState: AppState) {
@@ -111,6 +100,23 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
         }
     }
 
+
+    private fun initViewModel() {
+        val viewModel: MainViewModel by viewModel()
+        model = viewModel
+        model.subscribe().observe(this, { renderData(it) })
+    }
+
+    private fun initViews() {
+        initRV()
+        setOnSearchClickListener()
+    }
+
+    private fun initRV() {
+        rv_main.layoutManager = LinearLayoutManager(context)
+        rv_main.adapter = adapter
+    }
+
     private fun setOnSearchClickListener() {
         text_input_layout_search.setEndIconOnClickListener {
             hideKeyboard(text_input_search)
@@ -122,16 +128,6 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
                 showNoInternetConnectionDialog()
             }
         }
-    }
-
-    private fun initViewModel() {
-        model = viewModelFactory.create(MainViewModel::class.java)
-        model.subscribe().observe(this, { renderData(it) })
-    }
-
-    private fun initRV() {
-        rv_main.layoutManager = LinearLayoutManager(context)
-        rv_main.adapter = adapter
     }
 
     private fun hideKeyboard(view: View) {
