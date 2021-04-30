@@ -1,23 +1,22 @@
 package com.joesemper.simpletranslator.view.main
 
-import com.joesemper.simpletranslator.model.data.AppState
-import com.joesemper.simpletranslator.model.data.DataModel
-import com.joesemper.simpletranslator.model.datasource.DataSource
-import com.joesemper.simpletranslator.model.datasource.DataSourceLocal
+import com.joesemper.model.data.DataModel
+import com.joesemper.repository.datasource.DataSource
+import com.joesemper.repository.datasource.DataSourceLocal
 import com.joesemper.simpletranslator.viewmodel.Interactor
 
 class MainInteractor(
     private val remoteRepository: DataSource<List<DataModel>>,
     private val localRepository: DataSourceLocal<List<DataModel>>
-) : Interactor<AppState> {
+) : Interactor<com.joesemper.model.data.AppState> {
 
-    override suspend fun getData(word: String, fromRemoteSource: Boolean): AppState {
-        val appState: AppState
+    override suspend fun getData(word: String, fromRemoteSource: Boolean): com.joesemper.model.data.AppState {
+        val appState: com.joesemper.model.data.AppState
         if (fromRemoteSource) {
-            appState = AppState.Success(remoteRepository.getData(word))
+            appState = com.joesemper.model.data.AppState.Success(remoteRepository.getData(word))
             localRepository.saveToDb(appState)
         } else {
-            appState = AppState.Success(localRepository.getData(word))
+            appState = com.joesemper.model.data.AppState.Success(localRepository.getData(word))
         }
         return appState
     }

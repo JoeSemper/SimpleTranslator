@@ -8,9 +8,9 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.joesemper.model.data.AppState
+import com.joesemper.model.data.DataModel
 import com.joesemper.simpletranslator.R
-import com.joesemper.simpletranslator.model.data.AppState
-import com.joesemper.simpletranslator.model.data.DataModel
 import com.joesemper.simpletranslator.utils.convertMeaningsToString
 import com.joesemper.simpletranslator.utils.network.isOnline
 import com.joesemper.simpletranslator.view.base.BaseFragment
@@ -70,7 +70,7 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
                 MainFragmentDirections.actionMainFragmentToDescriptionFragment(
                     data.meanings?.first()?.imageUrl!!,
                     data.text!!,
-                    convertMeaningsToString(data.meanings),
+                    convertMeaningsToString(data.meanings!!),
                 )
             )
         }

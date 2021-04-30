@@ -2,7 +2,7 @@ package com.joesemper.simpletranslator.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.joesemper.simpletranslator.model.data.AppState
+import com.joesemper.model.data.AppState
 import kotlinx.coroutines.*
 
 abstract class BaseViewModel<T : AppState>(

@@ -35,6 +35,10 @@ android {
 }
 
 dependencies {
+    //Modules
+    implementation project(Modules.model)
+    implementation project(Modules.repository)
+
     //AndroidX
     implementation Tools.multidex
     implementation Design.appcompat

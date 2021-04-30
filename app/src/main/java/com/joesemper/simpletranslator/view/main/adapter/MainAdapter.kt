@@ -5,22 +5,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.joesemper.simpletranslator.R
-import com.joesemper.simpletranslator.model.data.DataModel
 import kotlinx.android.synthetic.main.main_fragment_recycler_item.view.*
 
 class MainAdapter(
     private var onListItemClickListener: OnListItemClickListener,
 ) : RecyclerView.Adapter<MainAdapter.RecyclerItemViewHolder>() {
 
-    private var data: List<DataModel> = arrayListOf()
+    private var data: List<com.joesemper.model.data.DataModel> = arrayListOf()
 
-    fun setData(data: List<DataModel>) {
+    fun setData(data: List<com.joesemper.model.data.DataModel>) {
         this.data = data
         notifyDataSetChanged()
     }
 
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        fun bind(data: DataModel) {
+        fun bind(data: com.joesemper.model.data.DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
                 itemView.tv_item_header.text = data.text
                 itemView.tv_item_translation.text = data.meanings?.get(0)?.translation?.translation
@@ -45,11 +44,11 @@ class MainAdapter(
         return data.size
     }
 
-    private fun openInNewWindow(listItemData: DataModel) {
+    private fun openInNewWindow(listItemData: com.joesemper.model.data.DataModel) {
         onListItemClickListener.onItemClick(listItemData)
     }
 
     interface OnListItemClickListener {
-        fun onItemClick(data: DataModel)
+        fun onItemClick(data: com.joesemper.model.data.DataModel)
     }
 }
