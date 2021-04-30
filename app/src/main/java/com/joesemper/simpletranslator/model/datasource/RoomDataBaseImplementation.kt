@@ -2,11 +2,9 @@ package com.joesemper.simpletranslator.model.datasource
 
 import com.joesemper.simpletranslator.model.data.AppState
 import com.joesemper.simpletranslator.model.data.DataModel
-import com.joesemper.simpletranslator.model.datasource.DataSource
 import com.joesemper.simpletranslator.model.room.HistoryDao
 import com.joesemper.simpletranslator.utils.convertDataModelSuccessToEntity
 import com.joesemper.simpletranslator.utils.mapHistoryEntityToSearchResult
-import io.reactivex.Single
 
 class RoomDataBaseImplementation(private val historyDao: HistoryDao) :
     DataSourceLocal<List<DataModel>> {
