@@ -3,9 +3,9 @@ package com.joesemper.simpletranslator.view.base
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.joesemper.model.data.AppState
+import com.joesemper.model.data.DataModel
 import com.joesemper.simpletranslator.R
-import com.joesemper.simpletranslator.model.data.AppState
-import com.joesemper.simpletranslator.model.data.DataModel
 import com.joesemper.simpletranslator.utils.network.isOnline
 import com.joesemper.simpletranslator.utils.ui.AlertDialogFragment
 import com.joesemper.simpletranslator.viewmodel.BaseViewModel
@@ -51,7 +51,7 @@ abstract class BaseFragment<T : AppState, I: Interactor<T>> : Fragment() {
                 if (appState.progress != null) {
                     progress_bar_horizontal.visibility = View.VISIBLE
                     progress_bar_round.visibility = View.GONE
-                    progress_bar_horizontal.progress = appState.progress
+                    progress_bar_horizontal.progress = appState.progress!!
                 } else {
                     progress_bar_horizontal.visibility = View.GONE
                     progress_bar_round.visibility = View.VISIBLE

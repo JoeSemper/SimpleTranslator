@@ -7,15 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import com.joesemper.model.data.AppState
+import com.joesemper.model.data.DataModel
 import com.joesemper.simpletranslator.R
-import com.joesemper.simpletranslator.model.data.AppState
-import com.joesemper.simpletranslator.model.data.DataModel
 import com.joesemper.simpletranslator.view.base.BaseFragment
 import com.joesemper.simpletranslator.view.history.adapter.HistoryAdapter
 import kotlinx.android.synthetic.main.fragment_history.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
-import java.lang.IllegalStateException
 
 class HistoryFragment : BaseFragment<AppState, HistoryInteractor>() {
 

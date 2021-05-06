@@ -6,21 +6,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.joesemper.simpletranslator.R
-import com.joesemper.simpletranslator.model.data.DataModel
 import kotlinx.android.synthetic.main.history_fragment_rv_item.view.*
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>() {
 
-    private var data: List<DataModel> = arrayListOf()
+    private var data: List<com.joesemper.model.data.DataModel> = arrayListOf()
 
-    fun setData(data: List<DataModel>) {
+    fun setData(data: List<com.joesemper.model.data.DataModel>) {
         this.data = data
         notifyDataSetChanged()
     }
 
     inner class RecyclerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        fun bind(data: DataModel) {
+        fun bind(data: com.joesemper.model.data.DataModel) {
             if (layoutPosition != RecyclerView.NO_POSITION) {
                 itemView.tv_item_history.text = data.text
                 itemView.setOnClickListener {

@@ -1,7 +1,7 @@
 package com.joesemper.simpletranslator.view.main
 
 import androidx.lifecycle.LiveData
-import com.joesemper.simpletranslator.model.data.AppState
+import com.joesemper.model.data.AppState
 import com.joesemper.simpletranslator.utils.parseOnlineSearchResults
 import com.joesemper.simpletranslator.viewmodel.BaseViewModel
 import kotlinx.coroutines.Dispatchers

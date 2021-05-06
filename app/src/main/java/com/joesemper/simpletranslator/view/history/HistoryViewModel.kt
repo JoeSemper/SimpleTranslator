@@ -1,12 +1,11 @@
 package com.joesemper.simpletranslator.view.history
 
 import androidx.lifecycle.LiveData
-import com.joesemper.simpletranslator.model.data.AppState
-import com.joesemper.simpletranslator.utils.parseLocalSearchResults
+import com.joesemper.model.data.AppState
 import com.joesemper.simpletranslator.viewmodel.BaseViewModel
 import kotlinx.coroutines.launch
 
-class HistoryViewModel(private val interactor: HistoryInteractor) : BaseViewModel<AppState>() {
+class HistoryViewModel(private val interactor: HistoryInteractor) : BaseViewModel<com.joesemper.model.data.AppState>() {
 
     private val liveDataForViewToObserve: LiveData<AppState> = _mutableLiveData
 

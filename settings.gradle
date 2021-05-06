@@ -1,2 +1,4 @@
+include ':repository'
+include ':model'
 include ':app'
 rootProject.name = "Simple Translator"
