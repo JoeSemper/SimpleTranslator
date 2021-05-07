@@ -1,4 +1,4 @@
-package com.joesemper.simpletranslator.view.history
+package com.joesemper.history.view.history
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,13 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import com.joesemper.history.R
 import com.joesemper.model.data.AppState
 import com.joesemper.model.data.DataModel
-import com.joesemper.simpletranslator.R
 import com.joesemper.simpletranslator.view.base.BaseFragment
-import com.joesemper.simpletranslator.view.history.adapter.HistoryAdapter
+import com.joesemper.history.view.history.adapter.HistoryAdapter
 import kotlinx.android.synthetic.main.fragment_history.*
-import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class HistoryFragment : BaseFragment<AppState, HistoryInteractor>() {
@@ -65,9 +64,11 @@ class HistoryFragment : BaseFragment<AppState, HistoryInteractor>() {
     }
 
     private fun initViewModel() {
+
         if (rv_history.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
+        injectDependencies()
         val viewModel: HistoryViewModel by viewModel()
         model = viewModel
         model.subscribe().observe(this@HistoryFragment as LifecycleOwner, { renderData(it) })

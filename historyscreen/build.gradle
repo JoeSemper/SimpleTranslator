@@ -1,42 +1,21 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-android-extensions'
-    id 'kotlin-kapt'
-    id 'androidx.navigation.safeargs'
-}
+apply plugin: 'com.android.dynamic-feature'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion Config.compile_sdk
-    buildToolsVersion Config.build_tools
 
     defaultConfig {
-        applicationId Config.application_id
         minSdkVersion Config.min_sdk
         targetSdkVersion Config.target_sdk
         versionCode Releases.version_code
         versionName Releases.version_name
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility Config.java_version
-        targetCompatibility Config.java_version
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    dynamicFeatures = [Modules.historyScreen]
 }
 
 dependencies {
-    //Modules
+    implementation project(Modules.app)
     implementation project(Modules.model)
     implementation project(Modules.repository)
 
@@ -46,19 +25,12 @@ dependencies {
 
     //Design
     implementation Design.material
-    implementation Design.swipe_refresh
 
     //Kotlin
     implementation Kotlin.core
     implementation Kotlin.stdlib
     implementation Kotlin.coroutines_core
     implementation Kotlin.coroutines_android
-
-    //Retrofit 2
-    implementation Retrofit.retrofit
-    implementation Retrofit.converter_gson
-    implementation Retrofit.adapter_coroutines
-    implementation Retrofit.logging_interceptor
 
     // Navigation
     implementation Navigation.fragment_ktx
@@ -73,16 +45,21 @@ dependencies {
     implementation Koin.koin_android
     implementation Koin.koin_view_model
 
-    //Picasso
-    implementation Picasso.picasso
-
     //Room
     implementation Room.runtime
     kapt Room.compiler
     implementation Room.room_ktx
 
+    //Google Play libraries
+    implementation GooglePlay.googlePlayCore
+
     //Test
     testImplementation TestImpl.junit
     androidTestImplementation TestImpl.runner
     androidTestImplementation TestImpl.espresso
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+repositories {
+    mavenCentral()
 }

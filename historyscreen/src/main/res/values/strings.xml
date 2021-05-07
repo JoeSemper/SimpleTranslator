@@ -15,7 +15,4 @@
     <string name="dialog_tittle_sorry">Sorry</string>
     <string name="error">Error</string>
     <string name="menu_title_history">History</string>
-    <string name="title_buildsrc">buildSrc</string>
-    <string name="title_historyscreen">History Scren</string>
-    <string name="title_historyscreenfeature">History Screen Feature</string>
 </resources>

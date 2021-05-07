@@ -1,4 +1,4 @@
-package com.joesemper.simpletranslator.view.history
+package com.joesemper.history.view.history
 
 import com.joesemper.model.data.DataModel
 import com.joesemper.repository.datasource.DataSource

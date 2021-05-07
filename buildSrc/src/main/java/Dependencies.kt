@@ -18,6 +18,7 @@ object Modules {
     const val app = ":app"
     const val model = ":model"
     const val repository = ":repository"
+    const val historyScreen = ":historyscreen"
 }
 
 object Versions {
@@ -58,6 +59,9 @@ object Versions {
 
     //JetpackCompose
     const val jetpack = "1.0.0-alpha10"
+
+    //Google Play
+    const val googlePlayCore = "1.6.3"
 
     //Test
     const val jUnit = "4.12"
@@ -114,6 +118,10 @@ object Navigation {
 
 object JetpackCompose {
     const val navigation_compose = "androidx.navigation:navigation-compose:${Versions.jetpack}"
+}
+
+object GooglePlay {
+    const val googlePlayCore = "com.google.android.play:core:${Versions.googlePlayCore}"
 }
 
 object TestImpl {

@@ -1,11 +1,11 @@
-package com.joesemper.simpletranslator.view.history.adapter
+package com.joesemper.history.view.history.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.joesemper.simpletranslator.R
+import com.joesemper.history.R
 import kotlinx.android.synthetic.main.history_fragment_rv_item.view.*
 
 class HistoryAdapter : RecyclerView.Adapter<HistoryAdapter.RecyclerItemViewHolder>() {
