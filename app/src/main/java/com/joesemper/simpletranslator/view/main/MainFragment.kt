@@ -8,8 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.android.play.core.splitinstall.SplitInstallManager
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
@@ -18,11 +22,12 @@ import com.joesemper.model.data.DataModel
 import com.joesemper.simpletranslator.R
 import com.joesemper.simpletranslator.di.injectDependencies
 import com.joesemper.simpletranslator.utils.convertMeaningsToString
+import com.joesemper.simpletranslator.utils.network.OnlineLiveData
 import com.joesemper.simpletranslator.utils.network.isOnline
+import com.joesemper.simpletranslator.utils.ui.viewById
 import com.joesemper.simpletranslator.view.base.BaseFragment
 import com.joesemper.simpletranslator.view.main.adapter.MainAdapter
-import kotlinx.android.synthetic.main.fragment_main.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.currentScope
 
 private const val HISTORY_ACTIVITY_FEATURE_NAME = "historyscreen"
 
@@ -35,6 +40,10 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
     override lateinit var model: MainViewModel
 
     private lateinit var splitInstallManager: SplitInstallManager
+
+    private val mainRecyclerView by viewById<RecyclerView>(R.id.rv_main)
+    private val textInputLayout by viewById<TextInputLayout>(R.id.text_input_layout_search)
+    private val textInputSearch by viewById<TextInputEditText>(R.id.text_input_search)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -113,11 +122,11 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
     }
 
     private fun initViewModel() {
-        if (rv_main.adapter != null) {
+        if (mainRecyclerView.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
         injectDependencies()
-        val viewModel: MainViewModel by viewModel()
+        val viewModel: MainViewModel by currentScope.inject()
         model = viewModel
         model.subscribe().observe(this as LifecycleOwner, { renderData(it) })
     }
@@ -128,20 +137,24 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
     }
 
     private fun initRV() {
-        rv_main.layoutManager = LinearLayoutManager(context)
-        rv_main.adapter = adapter
+        mainRecyclerView.layoutManager = LinearLayoutManager(context)
+        mainRecyclerView.adapter = adapter
     }
 
     private fun setOnSearchClickListener() {
-        text_input_layout_search.setEndIconOnClickListener {
-            hideKeyboard(text_input_search)
-            val word = text_input_search.text.toString()
-            isNetWorkAvailable = isOnline(requireContext())
-            if (isNetWorkAvailable) {
-                model.getData(word, isNetWorkAvailable)
-            } else {
-                showNoInternetConnectionDialog()
-            }
+        textInputLayout.setEndIconOnClickListener {
+            hideKeyboard(textInputSearch)
+            val word = textInputSearch.text.toString()
+
+            OnlineLiveData(requireContext()).observe(
+                this as LifecycleOwner,
+                Observer<Boolean> { isNetWorkAvailable ->
+                    if (isNetWorkAvailable) {
+                        model.getData(word, isNetWorkAvailable)
+                    } else {
+                        showNoInternetConnectionDialog()
+                    }
+                })
         }
     }
 
