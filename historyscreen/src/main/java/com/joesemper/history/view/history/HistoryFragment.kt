@@ -7,18 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
+import androidx.recyclerview.widget.RecyclerView
 import com.joesemper.history.R
+import com.joesemper.history.view.history.adapter.HistoryAdapter
 import com.joesemper.model.data.AppState
 import com.joesemper.model.data.DataModel
+import com.joesemper.simpletranslator.utils.ui.viewById
 import com.joesemper.simpletranslator.view.base.BaseFragment
-import com.joesemper.history.view.history.adapter.HistoryAdapter
 import kotlinx.android.synthetic.main.fragment_history.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.android.scope.currentScope
 
 class HistoryFragment : BaseFragment<AppState, HistoryInteractor>() {
 
     override lateinit var model: HistoryViewModel
     private val adapter: HistoryAdapter by lazy { HistoryAdapter() }
+
+    private val historyRecycler by viewById<RecyclerView>(R.id.rv_history)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,18 +68,17 @@ class HistoryFragment : BaseFragment<AppState, HistoryInteractor>() {
     }
 
     private fun initViewModel() {
-
-        if (rv_history.adapter != null) {
+        if (historyRecycler.adapter != null) {
             throw IllegalStateException("The ViewModel should be initialised first")
         }
         injectDependencies()
-        val viewModel: HistoryViewModel by viewModel()
+        val viewModel: HistoryViewModel by currentScope.inject()
         model = viewModel
         model.subscribe().observe(this@HistoryFragment as LifecycleOwner, { renderData(it) })
     }
 
     private fun initViews() {
-        rv_history.adapter = adapter
+        historyRecycler.adapter = adapter
     }
 
 }
