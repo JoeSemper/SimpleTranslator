@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
-import com.joesemper.history.R
 import com.joesemper.history.view.history.adapter.HistoryAdapter
+import com.joesemper.historyscreen.R
 import com.joesemper.model.data.AppState
 import com.joesemper.model.data.DataModel
 import com.joesemper.simpletranslator.utils.ui.viewById
