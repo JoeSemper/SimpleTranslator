@@ -1,4 +1,4 @@
-package com.joesemper.simpletranslator.view.history
+package com.joesemper.history.view.history
 
 import androidx.lifecycle.LiveData
 import com.joesemper.model.data.AppState
