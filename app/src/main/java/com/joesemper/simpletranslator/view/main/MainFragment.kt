@@ -1,6 +1,9 @@
 package com.joesemper.simpletranslator.view.main
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -23,7 +26,6 @@ import com.joesemper.simpletranslator.R
 import com.joesemper.simpletranslator.di.injectDependencies
 import com.joesemper.simpletranslator.utils.convertMeaningsToString
 import com.joesemper.simpletranslator.utils.network.OnlineLiveData
-import com.joesemper.simpletranslator.utils.network.isOnline
 import com.joesemper.simpletranslator.utils.ui.viewById
 import com.joesemper.simpletranslator.view.base.BaseFragment
 import com.joesemper.simpletranslator.view.main.adapter.MainAdapter
@@ -69,38 +71,8 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.menu_history -> {
-                splitInstallManager = SplitInstallManagerFactory.create(requireContext())
-                val request =
-                    SplitInstallRequest
-                        .newBuilder()
-                        .addModule(HISTORY_ACTIVITY_FEATURE_NAME)
-                        .build()
-
-                splitInstallManager
-                    .startInstall(request)
-                    .addOnSuccessListener {
-                        val fragment = Class.forName("com.joesemper.history.view.history.HistoryFragment")
-                            .newInstance() as Fragment
-
-                        requireActivity().supportFragmentManager
-                            .beginTransaction()
-                            .replace(R.id.container_main, fragment)
-                            .commit()
-
-//                        view?.findNavController()?.navigate(
-//                            MainFragmentDirections.actionMainFragmentToHistoryFragment()
-//                        )
-                    }
-                    .addOnFailureListener {
-                        Toast.makeText(
-                            requireContext(),
-                            "Couldn't download feature: " + it.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                true
-            }
+            R.id.menu_history -> runHistoryScreen()
+            R.id.menu_settings -> runSettings()
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -139,6 +111,45 @@ class MainFragment : BaseFragment<AppState, MainInteractor>() {
     private fun initRV() {
         mainRecyclerView.layoutManager = LinearLayoutManager(context)
         mainRecyclerView.adapter = adapter
+    }
+
+    private fun runHistoryScreen(): Boolean {
+        splitInstallManager = SplitInstallManagerFactory.create(requireContext())
+        val request =
+            SplitInstallRequest
+                .newBuilder()
+                .addModule(HISTORY_ACTIVITY_FEATURE_NAME)
+                .build()
+
+        splitInstallManager
+            .startInstall(request)
+            .addOnSuccessListener {
+                val fragment = Class.forName("com.joesemper.history.view.history.HistoryFragment")
+                    .newInstance() as Fragment
+
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container_main, fragment)
+                    .commit()
+
+//                        view?.findNavController()?.navigate(
+//                            MainFragmentDirections.actionMainFragmentToHistoryFragment()
+//                        )
+            }
+            .addOnFailureListener {
+                Toast.makeText(
+                    requireContext(),
+                    "Couldn't download feature: " + it.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        return true
+    }
+
+    @SuppressLint("InlinedApi")
+    private fun runSettings(): Boolean {
+        startActivityForResult(Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY), 42)
+        return true
     }
 
     private fun setOnSearchClickListener() {

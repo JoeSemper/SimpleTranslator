@@ -18,4 +18,5 @@
     <string name="title_buildsrc">buildSrc</string>
     <string name="title_historyscreen">History Scren</string>
     <string name="title_historyscreenfeature">History Screen Feature</string>
+    <string name="menu_title_settings">Settings</string>
 </resources>
