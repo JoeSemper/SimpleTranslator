@@ -3,8 +3,9 @@ package com.joesemper.simpletranslator.utils
 import com.joesemper.model.data.AppState
 import com.joesemper.model.data.DataModel
 import com.joesemper.model.data.Meanings
+import com.joesemper.repository.room.HistoryEntity
 
-fun mapHistoryEntityToSearchResult(list: List<com.joesemper.repository.room.HistoryEntity>): List<DataModel> {
+fun mapHistoryEntityToSearchResult(list: List<HistoryEntity>): List<DataModel> {
     val searchResult = ArrayList<DataModel>()
     if (!list.isNullOrEmpty()) {
         for (entity in list) {
@@ -14,14 +15,14 @@ fun mapHistoryEntityToSearchResult(list: List<com.joesemper.repository.room.Hist
     return searchResult
 }
 
-fun convertDataModelSuccessToEntity(appState: AppState): com.joesemper.repository.room.HistoryEntity? {
+fun convertDataModelSuccessToEntity(appState: AppState): HistoryEntity? {
     return when (appState) {
         is AppState.Success -> {
             val searchResult = appState.data
             if (searchResult.isNullOrEmpty() || searchResult[0].text.isNullOrEmpty()) {
                 null
             } else {
-                com.joesemper.repository.room.HistoryEntity(searchResult[0].text!!, null)
+                HistoryEntity(searchResult[0].text!!, null)
             }
         }
         else -> null
@@ -32,10 +33,7 @@ fun parseOnlineSearchResults(data: AppState): AppState {
     return AppState.Success(mapResult(data, true))
 }
 
-private fun mapResult(
-    data: AppState,
-    isOnline: Boolean
-): List<DataModel> {
+private fun mapResult(data: AppState, isOnline: Boolean): List<DataModel> {
     val newSearchResults = arrayListOf<DataModel>()
     when (data) {
         is AppState.Success -> {
